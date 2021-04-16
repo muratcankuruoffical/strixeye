@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+/*
+Route::group(['prefix' => 'auth'], function () {
 });
+*/
+
+Route::resource('possessors', \App\Http\Controllers\PossessorController::class);
+Route::resource('pokemons', \App\Http\Controllers\PokemonController::class);
