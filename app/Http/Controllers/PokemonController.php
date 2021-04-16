@@ -2,84 +2,58 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PokemonRequest;
 use App\Models\Pokemon;
 use Illuminate\Http\Request;
 
 class PokemonController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+        $pokemons = Pokemon::all();
+        return view('pokemons.index', ['pokemons' => $pokemons]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
-        //
+        return view('pokemons.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(PokemonRequest $request)
     {
-        //
+        $pictureName = time() . '.' . $request->picture->extension();
+        $request->picture->move(public_path('pictures'), $pictureName);
+        $created = Pokemon::create(array_merge($request->validated(), ['picture' => $pictureName]));
+        return redirect()->back()->with('message', 'Pokemon Successfully Created.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Pokemon  $pokemon
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(Pokemon $pokemon)
     {
-        //
+        return view('pokemons.show', ['pokemon' => $pokemon]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Pokemon  $pokemon
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Pokemon $pokemon)
     {
-        //
+        return view('pokemons.edit', ['pokemon' => $pokemon]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Pokemon  $pokemon
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Pokemon $pokemon)
+    public function update(PokemonRequest $request, Pokemon $pokemon)
     {
-        //
+        if ($request->hasFile('picture')) {
+            $pictureName = time() . '.' . $request->picture->extension();
+            $request->picture->move(public_path('pictures'), $pictureName);
+        }
+        $updated = $pokemon->update($request->validated());
+        return redirect()->back()->with('message', 'Pokemon Successfully Updated.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Pokemon  $pokemon
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Pokemon $pokemon)
     {
-        //
+
+        $deleted = $pokemon->delete();
+        return redirect()->back()->with('message', 'Pokemon Successfully Deleted.');
     }
 }
