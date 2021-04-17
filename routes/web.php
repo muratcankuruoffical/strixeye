@@ -13,14 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/*
-Route::group(['prefix' => 'auth'], function () {
+
+Route::group(['prefix' => 'users'], function () {
+    Route::get('/dashboard', [\App\Http\Controllers\UserController::class, 'dashboard'])->middleware('auth');
+    Route::get('/login', [\App\Http\Controllers\UserController::class, 'login']);
+    Route::post('/login', [\App\Http\Controllers\UserController::class, 'login'])->name('user.login');
+    Route::get('/register', [\App\Http\Controllers\UserController::class, 'register']);
+    Route::post('/register', [\App\Http\Controllers\UserController::class, 'register'])->name('user.register');
 });
-*/
+
 
 Route::resource('possessors', \App\Http\Controllers\PossessorController::class);
 Route::get('possessors/{possessor}/add/pokemon/{pokemon}', [\App\Http\Controllers\PossessorController::class, 'assignPokemonToPossessor']);
 Route::get('possessors/{possessor}/remove/pokemon/{pokemon}', [\App\Http\Controllers\PossessorController::class, 'removePossessorFromPokemon']);
 Route::resource('pokemons', \App\Http\Controllers\PokemonController::class);
-Route::post('pokemons/add/possessor', [\App\Http\Controllers\PokemonController::class, 'givePokemonToPossessor']);
-Route::post('pokemons/remove/possessor', [\App\Http\Controllers\PokemonController::class, 'removePokemonFromPossessor']);
+Route::post('pokemons/{pokemon}/add/possessor/{possessor}', [\App\Http\Controllers\PokemonController::class, 'givePokemonToPossessor']);
+Route::post('pokemons/{pokemon}/remove/possessor/{possessor}', [\App\Http\Controllers\PokemonController::class, 'removePokemonFromPossessor']);

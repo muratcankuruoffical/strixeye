@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\RedirectResponse;
 
-class PossessorRequest extends FormRequest
+class UserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -18,27 +18,6 @@ class PossessorRequest extends FormRequest
         return true;
     }
 
-    public function storeRules()
-    {
-        return [
-            'name' => 'required|string',
-            'picture' => 'required|image|mimes:jpg,webp,png',
-            'age' => 'required|integer',
-            'score' => 'required|integer',
-
-        ];
-    }
-
-    public function updateRules()
-    {
-        return [
-            'picture' => 'sometimes|image|mimes:jpg,webp,png',
-            'name' => 'required|string',
-            'age' => 'required|integer',
-            'score' => 'required|integer',
-        ];
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -46,10 +25,13 @@ class PossessorRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->routeIs('possessors.store')) {
-            return $this->storeRules();
+        if ($this->routeIs('user.register')) {
+            return [
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|min:6|max:12'
+            ];
         } else {
-            return $this->updateRules();
+            return [];
         }
     }
 

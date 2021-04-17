@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\RedirectResponse;
 
 class PokemonRequest extends FormRequest
 {
@@ -60,7 +61,11 @@ class PokemonRequest extends FormRequest
         }
     }
 
-    protected function failedValidation(Validator $validator)
+    /**
+     * @param Validator $validator
+     * @return RedirectResponse
+     */
+    protected function failedValidation(Validator $validator): RedirectResponse
     {
         return $this->redirector->to($this->getRedirectUrl())
             ->withErrors($validator)
