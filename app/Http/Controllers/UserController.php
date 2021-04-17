@@ -21,7 +21,7 @@ class UserController extends Controller
             if (Auth::attempt($credentials)) {
                 return redirect()->intended('users/dashboard');
             }
-            return back()->withErrors([
+            return redirect()->route('user.dashboard')->withErrors([
                 'message' => 'The provided credentials do not match our records.',
             ]);
         }
@@ -33,7 +33,7 @@ class UserController extends Controller
             return view('users.register');
         } else {
             User::create(array_merge($request->validated(), ['password' => bcrypt($request->password)]));
-            return back()->with('status', 'User Successfully Registered.');
+            return redirect()->route('user.dashboard')->with('status', 'User Successfully Registered.');
         }
 
     }

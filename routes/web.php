@@ -21,7 +21,7 @@ Route::group(['prefix' => 'users'], function () {
     Route::post('/register', [\App\Http\Controllers\UserController::class, 'register'])->name('user.register');
 });
 Route::middleware('auth')->prefix('dashboard')->group(function () {
-    Route::get('/', [\App\Http\Controllers\UserController::class, 'dashboard']);
+    Route::get('/', [\App\Http\Controllers\UserController::class, 'dashboard'])->name('user.dashboard');
     Route::resource('possessors', \App\Http\Controllers\PossessorController::class);
     Route::get('possessors/{possessor}/add/pokemon/{pokemon}', [\App\Http\Controllers\PossessorController::class, 'assignPokemonToPossessor']);
     Route::get('possessors/{possessor}/remove/pokemon/{pokemon}', [\App\Http\Controllers\PossessorController::class, 'removePossessorFromPokemon']);
