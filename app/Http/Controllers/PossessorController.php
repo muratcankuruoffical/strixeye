@@ -30,16 +30,14 @@ class PossessorController extends Controller
         return view('possessors.create');
     }
 
-    /**
-     * @param PossessorRequest $request
-     * @return RedirectResponse
-     */
-    public function store(PossessorRequest $request): RedirectResponse
+
+    public function store(PossessorRequest $request)
     {
+
         $pictureName = time() . '.' . $request->picture->extension();
         $request->picture->move(public_path('pictures'), $pictureName);
         $created = Possessor::create(array_merge($request->validated(), ['picture' => $pictureName]));
-        return redirect()->back()->with('message', 'Possessor Successfully Created.');
+        return redirect()->route('possessors.index')->with('message', 'Possessor Successfully Created.');
     }
 
     /**
@@ -74,7 +72,7 @@ class PossessorController extends Controller
         } else {
             $possessor->update($request->validated());
         }
-        return redirect()->back()->with('message', 'Possessor Successfully Updated.');
+        return redirect()->route('possessors.index')->with('message', 'Possessor Successfully Updated.');
     }
 
     /**
@@ -84,7 +82,7 @@ class PossessorController extends Controller
     public function destroy(Possessor $possessor): RedirectResponse
     {
         $deleted = $possessor->delete();
-        return redirect()->back()->with('message', 'Possessor Successfully Deleted.');
+        return redirect()->route('possessors.index')->with('message', 'Possessor Successfully Deleted.');
     }
 
     /**
