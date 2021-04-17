@@ -19,4 +19,8 @@ Route::group(['prefix' => 'auth'], function () {
 */
 
 Route::resource('possessors', \App\Http\Controllers\PossessorController::class);
+Route::post('possessors/add/pokemon', [\App\Http\Controllers\PossessorController::class, 'assignPokemonToPossessor']);
+Route::post('possessors/remove/pokemon', [\App\Http\Controllers\PossessorController::class, 'removePossessorFromPokemon']);
 Route::resource('pokemons', \App\Http\Controllers\PokemonController::class);
+Route::post('pokemons/add/possessor', [\App\Http\Controllers\PokemonController::class, 'givePokemonToPossessor']);
+Route::post('pokemons/remove/possessor', [\App\Http\Controllers\PokemonController::class, 'removePokemonFromPossessor']);

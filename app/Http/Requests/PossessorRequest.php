@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Validator;
 
-class PokemonRequest extends FormRequest
+class PossessorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +22,8 @@ class PokemonRequest extends FormRequest
             'name' => 'required|string',
             'picture' => 'required|image|mimes:jpg,webp,png',
             'age' => 'required|integer',
-            'height' => 'required|integer',
-            'evolves_from' => 'required|string',
-            'evolves_to' => 'required|string',
-            'weakness' => 'required|string',
-            'ability' => 'required|string'
+            'score' => 'required|integer',
+
         ];
     }
 
@@ -37,13 +33,8 @@ class PokemonRequest extends FormRequest
             'picture' => 'sometimes|image|mimes:jpg,webp,png',
             'name' => 'required|string',
             'age' => 'required|integer',
-            'height' => 'required|integer',
-            'evolves_from' => 'required|string',
-            'evolves_to' => 'required|string',
-            'weakness' => 'required|string',
-            'ability' => 'required|string'
+            'score' => 'required|integer',
         ];
-
     }
 
     /**
@@ -53,17 +44,10 @@ class PokemonRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->routeIs('pokemons.store')) {
+        if ($this->routeIs('possessors.store')) {
             return $this->storeRules();
         } else {
             return $this->updateRules();
         }
-    }
-
-    protected function failedValidation(Validator $validator)
-    {
-        return $this->redirector->to($this->getRedirectUrl())
-            ->withErrors($validator)
-            ->withInput();
     }
 }

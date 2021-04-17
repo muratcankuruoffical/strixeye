@@ -14,29 +14,21 @@
     <th>Name</th>
     <th>Picture</th>
     <th>Age</th>
-    <th>Height</th>
-    <th>Evolves From</th>
-    <th>Evolves To</th>
-    <th>Weakness</th>
-    <th>Ability</th>
+    <th>Score</th>
     <th>Actions</th>
     </thead>
     <tbody>
 
-    @foreach($pokemons as $pokemon)
+    @foreach($possessors as $possessor)
         <tr>
             <td>{{ $loop->index }}</td>
-            <td>{{ $pokemon->name }}</td>
-            <td>{{ $pokemon->picture }}</td>
-            <td>{{ $pokemon->age }}</td>
-            <td>{{ $pokemon->height }}</td>
-            <td>{{ $pokemon->evolves_from }}</td>
-            <td>{{ $pokemon->evolves_to }}</td>
-            <td>{{ $pokemon->weakness }}</td>
-            <td>{{ $pokemon->ability }}</td>
-            <td><a href="{{ route('pokemons.edit', $pokemon) }}">Edit</a></td>
+            <td>{{ $possessor->name }}</td>
+            <td>{{ $possessor->picture }}</td>
+            <td>{{ $possessor->age }}</td>
+            <td>{{ $possessor->score }}</td>
+            <td><a href="{{ route('possessors.edit', $possessor) }}">Edit</a></td>
             <td>
-                <form action="{{ route('pokemons.destroy', $pokemon->id) }}" method="POST">
+                <form action="{{ route('possessors.destroy', $possessor->id) }}" method="POST">
                     @method('DELETE')
                     @csrf
                     <input type="submit" value="Delete">

@@ -8,11 +8,24 @@
     <title>Document</title>
 </head>
 <body>
-<form action="{{ route('pokemons.update', $pokemon) }}" method="POST">
+@if($errors->any())
+    <div>
+        <ul>
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+@if(session('message'))
+    <div>
+        <p>{{ session('message') }}</p>
+    </div>
+@endif
+<form action="{{ route('pokemons.update', $pokemon) }}" method="POST" enctype="multipart/form-data">
     @method("PUT")
     @csrf
     <input type="file" name="picture"><br>
-    <input type="hidden" name="picture" value="{{ $pokemon->picture }}">
     <input type="text" name="name" placeholder="Your pokemon name" value="{{ $pokemon->name }}"><br>
     <input type="number" name="age" placeholder="Your pokemon age" value="{{ $pokemon->age }}"><br>
     <input type="number" name="height" placeholder="Your pokemon height" value="{{ $pokemon->height }}"><br>

@@ -11,8 +11,7 @@ class PokemonController extends Controller
 
     public function index()
     {
-        $pokemons = Pokemon::all();
-        return view('pokemons.index', ['pokemons' => $pokemons]);
+        return view('pokemons.index', ['pokemons' => Pokemon::all()]);
     }
 
 
@@ -42,11 +41,14 @@ class PokemonController extends Controller
 
     public function update(PokemonRequest $request, Pokemon $pokemon)
     {
+
         if ($request->hasFile('picture')) {
             $pictureName = time() . '.' . $request->picture->extension();
             $request->picture->move(public_path('pictures'), $pictureName);
+            $pokemon->update(array_merge($request->validated(), ['picture' => $pictureName]));
+        } else {
+            $pokemon->update($request->validated());
         }
-        $updated = $pokemon->update($request->validated());
         return redirect()->back()->with('message', 'Pokemon Successfully Updated.');
     }
 
@@ -55,5 +57,15 @@ class PokemonController extends Controller
 
         $deleted = $pokemon->delete();
         return redirect()->back()->with('message', 'Pokemon Successfully Deleted.');
+    }
+
+    public function givePokemonToPossessor()
+    {
+
+    }
+
+    public function removePokemonFromPossessor()
+    {
+
     }
 }

@@ -2,84 +2,66 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PossessorRequest;
 use App\Models\Possessor;
 use Illuminate\Http\Request;
 
 class PossessorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+        return view('possessors.index', ['possessors' => Possessor::all()]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        return view('possessors.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(PossessorRequest $request)
     {
-        //
+        $pictureName = time() . '.' . $request->picture->extension();
+        $request->picture->move(public_path('pictures'), $pictureName);
+        $created = Possessor::create(array_merge($request->validated(), ['picture' => $pictureName]));
+        return redirect()->back()->with('message', 'Possessor Successfully Created.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Possessor  $possessor
-     * @return \Illuminate\Http\Response
-     */
     public function show(Possessor $possessor)
     {
-        //
+        return view('possessors.show', ['possessor' => $possessor]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Possessor  $possessor
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Possessor $possessor)
     {
-        //
+        return view('possessors.edit', ['possessor' => $possessor]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Possessor  $possessor
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Possessor $possessor)
+    public function update(PossessorRequest $request, Possessor $possessor)
     {
-        //
+        if ($request->hasFile('picture')) {
+            $pictureName = time() . '.' . $request->picture->extension();
+            $request->picture->move(public_path('pictures'), $pictureName);
+            $possessor->update(array_merge($request->validated(), ['picture' => $pictureName]));
+        } else {
+            $possessor->update($request->validated());
+        }
+        return redirect()->back()->with('message', 'Possessor Successfully Updated.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Possessor  $possessor
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Possessor $possessor)
     {
-        //
+        $deleted = $possessor->delete();
+        return redirect()->back()->with('message', 'Possessor Successfully Deleted.');
+    }
+
+    public function assignPokemonToPossessor()
+    {
+
+    }
+
+    public function removePossessorFromPokemon()
+    {
+
     }
 }

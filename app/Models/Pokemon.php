@@ -10,4 +10,9 @@ class Pokemon extends Model
     use HasFactory;
     protected $table = "pokemons";
     protected $fillable = ['name', 'picture', 'age', 'height', 'evolves_from', 'evolves_to', 'weakness', 'ability'];
+
+    public function possessors()
+    {
+        return $this->belongsToMany(Possessor::class, 'pokemon_has_possessors');
+    }
 }
