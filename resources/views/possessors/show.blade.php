@@ -9,5 +9,13 @@
 </head>
 <body>
 {{ $possessor->name }}
+<h2>Your Pokemons</h2>
+@if($possessor->pokemons)
+    @foreach($possessor->pokemons as $pokemon)
+        <img src="{{ asset('pictures/'.$pokemon->picture) }}" alt="">
+        {{ $pokemon->name }}
+    @endforeach
+@endif
+
 </body>
 </html>

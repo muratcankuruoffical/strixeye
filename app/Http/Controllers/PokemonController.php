@@ -4,23 +4,38 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PokemonRequest;
 use App\Models\Pokemon;
+use App\Models\Possessor;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class PokemonController extends Controller
 {
 
+    /**
+     * @return Application|Factory|View
+     */
     public function index()
     {
         return view('pokemons.index', ['pokemons' => Pokemon::all()]);
     }
 
 
+    /**
+     * @return Application|Factory|View
+     */
     public function create()
     {
         return view('pokemons.create');
     }
 
-    public function store(PokemonRequest $request)
+    /**
+     * @param PokemonRequest $request
+     * @return RedirectResponse
+     */
+    public function store(PokemonRequest $request): RedirectResponse
     {
         $pictureName = time() . '.' . $request->picture->extension();
         $request->picture->move(public_path('pictures'), $pictureName);
@@ -29,17 +44,30 @@ class PokemonController extends Controller
     }
 
 
+    /**
+     * @param Pokemon $pokemon
+     * @return Application|Factory|View
+     */
     public function show(Pokemon $pokemon)
     {
         return view('pokemons.show', ['pokemon' => $pokemon]);
     }
 
+    /**
+     * @param Pokemon $pokemon
+     * @return Application|Factory|View
+     */
     public function edit(Pokemon $pokemon)
     {
         return view('pokemons.edit', ['pokemon' => $pokemon]);
     }
 
-    public function update(PokemonRequest $request, Pokemon $pokemon)
+    /**
+     * @param PokemonRequest $request
+     * @param Pokemon $pokemon
+     * @return RedirectResponse
+     */
+    public function update(PokemonRequest $request, Pokemon $pokemon): RedirectResponse
     {
 
         if ($request->hasFile('picture')) {
@@ -52,20 +80,32 @@ class PokemonController extends Controller
         return redirect()->back()->with('message', 'Pokemon Successfully Updated.');
     }
 
-    public function destroy(Pokemon $pokemon)
+    /**
+     * @param Pokemon $pokemon
+     * @return RedirectResponse
+     */
+    public function destroy(Pokemon $pokemon): RedirectResponse
     {
 
         $deleted = $pokemon->delete();
         return redirect()->back()->with('message', 'Pokemon Successfully Deleted.');
     }
 
-    public function givePokemonToPossessor()
+    /**
+     * @param Pokemon $pokemon
+     * @param Possessor $possessor
+     */
+    public function givePokemonToPossessor(Pokemon $pokemon, Possessor $possessor)
     {
-
+        $pokemon->possessors()->attach($possessor);
     }
 
-    public function removePokemonFromPossessor()
+    /**
+     * @param Pokemon $pokemon
+     * @param Possessor $possessor
+     */
+    public function removePokemonFromPossessor(Pokemon $pokemon, Possessor $possessor)
     {
-
+        $pokemon->possessors()->detach($possessor);
     }
 }

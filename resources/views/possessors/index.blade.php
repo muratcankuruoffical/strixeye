@@ -22,12 +22,12 @@
     @foreach($possessors as $possessor)
         <tr>
             <td>{{ $loop->index }}</td>
-            <td>{{ $possessor->name }}</td>
+            <td><a href="{{ route('possessors.show', $possessor->id) }}">{{ $possessor->name }}</a></td>
             <td>{{ $possessor->picture }}</td>
             <td>{{ $possessor->age }}</td>
             <td>{{ $possessor->score }}</td>
-            <td><a href="{{ route('possessors.edit', $possessor) }}">Edit</a></td>
             <td>
+                <a href="{{ route('possessors.edit', $possessor) }}">Edit</a>
                 <form action="{{ route('possessors.destroy', $possessor->id) }}" method="POST">
                     @method('DELETE')
                     @csrf
