@@ -40,7 +40,7 @@ class PokemonController extends Controller
         $pictureName = time() . '.' . $request->picture->extension();
         $request->picture->move(public_path('pictures'), $pictureName);
         $created = Pokemon::create(array_merge($request->validated(), ['picture' => $pictureName]));
-        return redirect()->back()->with('message', 'Pokemon Successfully Created.');
+        return redirect()->route('pokemons.index')->with('message', 'Pokemon Successfully Created.');
     }
 
 
@@ -77,7 +77,7 @@ class PokemonController extends Controller
         } else {
             $pokemon->update($request->validated());
         }
-        return redirect()->back()->with('message', 'Pokemon Successfully Updated.');
+        return redirect()->route('pokemons.index')->with('message', 'Pokemon Successfully Updated.');
     }
 
     /**
@@ -88,7 +88,7 @@ class PokemonController extends Controller
     {
 
         $deleted = $pokemon->delete();
-        return redirect()->back()->with('message', 'Pokemon Successfully Deleted.');
+        return redirect()->route('pokemons.index')->with('message', 'Pokemon Successfully Deleted.');
     }
 
     /**
