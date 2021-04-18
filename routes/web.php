@@ -23,8 +23,14 @@ Route::group(['prefix' => 'users'], function () {
 Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::get('/', [\App\Http\Controllers\UserController::class, 'dashboard'])->name('user.dashboard');
     Route::resource('possessors', \App\Http\Controllers\PossessorController::class);
-    Route::get('possessors/{possessor}/add/pokemon/{pokemon}', [\App\Http\Controllers\PossessorController::class, 'assignPokemonToPossessor']);
-    Route::get('possessors/{possessor}/remove/pokemon/{pokemon}', [\App\Http\Controllers\PossessorController::class, 'removePossessorFromPokemon']);
+    Route::post('possessors/add/pokemon', [
+        \App\Http\Controllers\PossessorController::class,
+        'assignPokemonToPossessor'
+    ])->name('assign_pokemon_to_possessor');
+    Route::get('possessors/{possessor}/remove/pokemon/{pokemon}', [
+        \App\Http\Controllers\PossessorController::class,
+        'removePossessorFromPokemon'
+    ])->name('remove_pokemon_from_possessor');;
     Route::resource('pokemons', \App\Http\Controllers\PokemonController::class);
     Route::post('pokemons/{pokemon}/add/possessor/{possessor}', [\App\Http\Controllers\PokemonController::class, 'givePokemonToPossessor']);
     Route::post('pokemons/{pokemon}/remove/possessor/{possessor}', [\App\Http\Controllers\PokemonController::class, 'removePokemonFromPossessor']);

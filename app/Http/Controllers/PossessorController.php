@@ -85,21 +85,24 @@ class PossessorController extends Controller
         return redirect()->route('possessors.index')->with('message', 'Possessor Successfully Deleted.');
     }
 
-    /**
-     * @param Possessor $possessor
-     * @param Pokemon $pokemon
-     */
-    public function assignPokemonToPossessor(Possessor $possessor, Pokemon $pokemon)
+
+
+    public function assignPokemonToPossessor()
     {
-        $possessor->pokemons()->attach($pokemon);
+        $possessor = Possessor::findOrFail(Request()->possessor_id);
+        $possessor->pokemons()->attach(Request()->pokemon_id);
+        return redirect()->route('possessors.index');
     }
+
 
     /**
      * @param Possessor $possessor
      * @param Pokemon $pokemon
+     * @return RedirectResponse
      */
-    public function removePossessorFromPokemon(Possessor $possessor, Pokemon $pokemon)
+    public function removePossessorFromPokemon(Possessor $possessor, Pokemon $pokemon): RedirectResponse
     {
         $possessor->pokemons()->detach($pokemon);
+        return redirect()->route('possessors.index');
     }
 }
